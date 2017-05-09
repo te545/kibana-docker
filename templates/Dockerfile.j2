@@ -1,11 +1,10 @@
 # This Dockerfile was generated from templates/Dockerfile.j2
-{% if '-' in version_tag -%}
-{%   set is_staging_build = True -%}
+{% if staging_build_num -%}
+{%   set version_tag = elastic_version + '-' + staging_build_num -%}
 {%   set url_root = 'http://staging.elastic.co/%s/downloads/kibana' % version_tag -%}
-{%   set elastic_version = version_tag.split('-')[0] -%}
 {% else -%}
+{%   set version_tag = elastic_version -%}
 {%   set url_root = 'https://artifacts.elastic.co/downloads/kibana' -%}
-{%   set elastic_version = version_tag -%}
 {% endif -%}
 
 
@@ -39,7 +38,7 @@ RUN groupadd --gid 1000 kibana && \
       kibana
 USER kibana
 
-{% if is_staging_build -%}
+{% if staging_build_num -%}
 RUN kibana-plugin install http://staging.elastic.co/{{ version_tag }}/downloads/kibana-plugins/x-pack/x-pack-{{ elastic_version }}.zip
 {% else -%}
 RUN kibana-plugin install x-pack

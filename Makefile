@@ -38,7 +38,8 @@ venv: requirements.txt
 # Generate the Dockerfile from a Jinja2 template.
 dockerfile: venv
 	jinja2 \
-	  -D version_tag='$(VERSION_TAG)' \
+	  -D elastic_version='$(ELASTIC_VERSION)' \
+	  -D staging_build_num='$(STAGING_BUILD_NUM)' \
 	  templates/Dockerfile.j2 > build/kibana/Dockerfile
 
 # Generate docker-compose.yml from a Jinja2 template.
